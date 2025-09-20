@@ -6,8 +6,16 @@ import healthRouter from "./routes/health";
 const app = express();
 const PORT = process.env.PORT || 4000;
 
+const origins = (process.env.CORS_ORIGINS ?? "")
+  .split(",")
+  .map(s => s.trim())
+  .filter(Boolean);
+
 // базовые миддлвары
-app.use(cors());
+app.use(cors({
+  origin: origins.length ? origins : true, // todo: fix cors
+  credentials: true
+}));
 app.use(express.json());
 
 // префикс для api
